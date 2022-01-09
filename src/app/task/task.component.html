@@ -1,0 +1,139 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<div id="menu">
+    <button (click)="changeBlock('new');"> Tasks List </button>
+    <button (click)="changeBlock('list');"> Add New Task </button>
+</div>
+
+<div *ngIf=" blocktype=='new' ">
+    <h1 class="text-center">Available Tasks</h1>
+    <div style="margin: 25px;" *ngFor="let dat of msg">
+        <div class="alerts" *ngIf="dat.message">
+            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+            <strong>Success! Taskid : {{ids}} {{dat.message}}</strong>
+        </div>
+        <div class="alertd" *ngIf="!dat.message">
+            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+            <strong>Error! {{dat.error}}</strong>
+        </div>
+    </div>
+    <div id="childpage" *ngFor="let e of data2">
+        <div class="inline">
+            <a>Active Path : Home</a>
+            <a>Available tasks : {{e.tasks.length}}</a>
+            <div class="search-container">
+                <form>
+                    <input type="text" placeholder="Search.." name="searchkey" [(ngModel)]="searchkey"
+                        autocomplete="off">
+                </form>
+            </div>
+        </div>
+
+        <div>
+            <table>
+                <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Message</th>
+                        <th scope="col">Priority</th>
+                        <th scope="col">Assigned To</th>
+                        <th scope="col">Created On</th>
+                        <th scope="col">Due On</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let e of e.tasks | filter: searchkey | paginate: { itemsPerPage: 10, currentPage: p };let i=index;">
+                        <td data-label="Id" scope="row">{{e.id}}</td>
+                        <td data-label="Message">{{e.message}}</td>
+                        <td data-label="Priority" [ngSwitch]="e.priority">
+                            <p *ngSwitchCase=" 1 ">Normal</p>
+                            <p *ngSwitchCase=" 2 ">Mid</p>
+                            <p *ngSwitchCase=" 3 ">Low</p>
+                        </td>
+                        <td data-label="Assigned To" *ngIf="e.assigned_name">{{e.assigned_name}}</td>
+                        <td data-label="Assigned To" *ngIf="!e.assigned_name">None</td>
+                        <td data-label="Created On">{{e.created_on}}</td>
+                        <td data-label="Due On" *ngIf="e.due_date">{{e.due_date}}</td>
+                        <td data-label="Due On" *ngIf="!e.due_date">None</td>
+                        <td data-label="Actions">
+                            <button id="iconbtn" (click)="editTask(e.id);"><i class="fa fa-edit"></i></button>
+                            <button id="iconbtn" (click)="deleteTask(e.id);"><i class="fa fa-trash"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="clearblock"><br></div>
+    </div>
+    <pagination-controls (pageChange)="p = $event" class="text-center"></pagination-controls>
+</div>
+
+
+<div class="container" *ngIf=" blocktype=='list' ">
+    <header *ngIf=" !edit ">
+        <h1 id='title'>Add New Task</h1>
+        <p id='description'>
+            Now add new task to our task manager
+        </p>
+    </header>
+    <header *ngIf=" edit ">
+        <h1 id='title'>Update Your Tasks</h1>
+        <p *ngIf=" edit ">You are currently editing taskid : {{edit}}</p>
+    </header>
+    <div id="survey-form">
+        <div *ngFor="let da of msgs">
+            <div class="alerts" *ngIf="da.taskid">
+                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+                <strong *ngIf=" !edit ">Success! Taskid : {{da.taskid}} is Added successfully</strong>
+                <strong *ngIf=" edit ">Success! Taskid : {{da.taskid}} is Updated successfully</strong>
+            </div>
+            <div class="alertd" *ngIf="!da.taskid">
+                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+                <strong>Error! {{da.error}}</strong>
+            </div>
+        </div>
+
+        <div class='form-input'>
+            <label id='number-label'>Enter your task details here</label>
+            <textarea type='text' placeholder='Enter your task here...' [(ngModel)]='message' required></textarea>
+        </div>
+
+        <div class='form-input'>
+            <label id='number-label'>Due Date
+                <span> (optional)</span>
+            </label>
+            <input type='date' class='form-input-size' [(ngModel)]='due_date' />
+            <label id='number-label'>Due Time
+                <span> (optional)</span>
+            </label>
+            <input type='time' class='form-input-size' [(ngModel)]='due_time' />
+        </div>
+
+        <div class='form-input'>
+            <label id='number-label'>Assign a task to particular user
+                <span> (optional)</span>
+            </label>
+            <select id='dropdown' class='form-input-size' [(ngModel)]='assigned_to'>
+                <optgroup label='Choose user here'>
+                <option *ngFor='let d of data1' value='{{d.id}}'>{{d.name}}</option>
+                </optgroup>
+            </select>
+        </div>
+
+        <div class='form-input'>
+            <label id='number-label'>Set priority of the task here
+                <span> (optional)</span>
+            </label>
+            <div class='in'>
+                <input type='radio' name='priority' [(ngModel)]='priority' id='radio-btn' value='1'>Normal
+                <input type='radio' name='priority' [(ngModel)]='priority' id='radio-btn' value='2'>Middle
+                <input type='radio' name='priority' [(ngModel)]='priority' id='radio-btn' value='3'>High
+            </div>
+        </div>
+
+        <div class='form-input text-center'>
+            <button type='submit' id='submit' (click)='submitForm()'>{{btntext}}</button>
+        </div>
+        </div>
+</div>

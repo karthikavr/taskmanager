@@ -1,0 +1,33 @@
+<h1 class="text-center">Available Users</h1>
+<div id="childpage" *ngFor="let d of data1">
+    <div class="inline">
+        <a>Active Path : Home</a>
+        <a>Available users : {{d.users.length}}</a>
+        <div class="search-container">
+            <form>
+              <input type="text" placeholder="Search.." name="search"  [(ngModel)]="searchkey" autocomplete="off">
+            </form>
+          </div>
+    </div>
+
+    <div>
+    <table>
+        <thead>
+        <tr>
+            <th scope="col">User Id</th>
+            <th scope="col">User Picture</th>
+            <th scope="col">User Name</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let d of d.users | filter: searchkey | paginate: { itemsPerPage: 5, currentPage: p };">
+            <td data-label="User Id" scope="row">{{d.id}}</td>
+            <td data-label="User Picture"><img src="{{d.picture}}"/></td>
+            <td data-label="User Name">{{d.name}}</td>
+        </tr>
+        </tbody>
+    </table>
+    </div>
+    <div class="clearblock"><br></div>
+</div>
+<pagination-controls (pageChange)="p = $event" class="text-center"></pagination-controls>
