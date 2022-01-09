@@ -16,7 +16,7 @@ export class HomeComponent implements OnInit {
   }
 
   getUsers(){
-    this.httpObj.get('http://svrpay.tk/f/v3/gloify.php?q=users').subscribe((res)=>{
+    this.httpObj.get('https://svrpay.tk/f/v3/gloify.php?q=users').subscribe((res)=>{
     this.data1 = res;
     });
   }
