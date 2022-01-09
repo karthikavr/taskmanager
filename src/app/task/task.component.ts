@@ -33,14 +33,14 @@ export class TaskComponent implements OnInit {
   }
 
   getUsers(){
-    this.httpObj.get('http://svrpay.tk/f/v3/gloify.php?q=users').subscribe((res)=>{
+    this.httpObj.get('https://svrpay.tk/f/v3/gloify.php?q=users').subscribe((res)=>{
     this.data1 = res;
     this.data1 = this.data1[0].users;
     });
   }
 
   getTasks(){
-    this.httpObj.get('http://svrpay.tk/f/v3/gloify.php?q=tasks').subscribe((response)=>{
+    this.httpObj.get('https://svrpay.tk/f/v3/gloify.php?q=tasks').subscribe((response)=>{
     this.data2 = response;
     });
   }
@@ -55,7 +55,7 @@ export class TaskComponent implements OnInit {
     var formdata = new FormData();
     formdata.append("taskid", id);
     formdata.append("q", "delete");
-    this.httpObj.post("http://svrpay.tk/f/v3/gloify.php", formdata).subscribe(response=>{
+    this.httpObj.post("https://svrpay.tk/f/v3/gloify.php", formdata).subscribe(response=>{
     this.ids=id;
     this.msg = response;
     this.msgs = "";
@@ -72,7 +72,7 @@ export class TaskComponent implements OnInit {
     formdata.append("priority", this.priority);
     formdata.append("taskid", this.edit);
     formdata.append("q", "update");
-    this.httpObj.post('http://svrpay.tk/f/v3/gloify.php', formdata).subscribe((response) =>{
+    this.httpObj.post('https://svrpay.tk/f/v3/gloify.php', formdata).subscribe((response) =>{
       this.msgs = response;
       this.msg = "";
       this.edit="";
@@ -90,7 +90,7 @@ export class TaskComponent implements OnInit {
       formdata.append("assigned_to", this.assigned_to);
       formdata.append("priority", this.priority);
       formdata.append("q", "create");
-      this.httpObj.post('http://svrpay.tk/f/v3/gloify.php', formdata).subscribe((response) =>{
+      this.httpObj.post('https://svrpay.tk/f/v3/gloify.php', formdata).subscribe((response) =>{
         this.msgs = response;
         this.msg = "";
         this.message="";
